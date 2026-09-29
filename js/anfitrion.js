@@ -9,8 +9,8 @@ let ordenSorteo = [], sorteando = false;
 const prepararOrden = () => { ordenSorteo = barajar(Array.from({ length: 75 }, (_, i) => i + 1), crearGenerador(estado.semillaSorteo)); };
 const persistir = () => guardar('anfitrion', estado);
 
-$('numeros').innerHTML = LETRAS.map((letra, f) => `<span class="letra">${letra}</span>` +
-  Array.from({ length: 15 }, (_, c) => `<span class="n" id="n${f * 15 + c + 1}">${f * 15 + c + 1}</span>`).join('')).join('');
+$('numeros').innerHTML = LETRAS.map(letra => `<span class="letra">${letra}</span>`).join('') +
+  Array.from({ length: 75 }, (_, i) => { const numero = (i % 5) * 15 + Math.floor(i / 5) + 1; return `<span class="n" id="n${numero}">${numero}</span>`; }).join('');
 
 function pintar() {
   const enEspera = estado.estado === 'esperando';
@@ -19,6 +19,8 @@ function pintar() {
   $('codigoGrande').textContent = $('codigoSala').textContent = estado.codigoSala;
   const jugadas = estado.jugadas, ultima = jugadas.at(-1), terminado = jugadas.length >= 75;
   $('contador').textContent = jugadas.length;
+  $('restantes').textContent = 75 - jugadas.length;
+  $('barra').style.width = (jugadas.length / 75 * 100) + '%';
   document.querySelectorAll('.n').forEach(n => n.className = 'n');
   jugadas.forEach(j => $('n' + j.numero).classList.add('sale'));
   if (ultima) $('n' + ultima.numero).classList.add('ultimo');

@@ -1,40 +1,13 @@
-<!doctype html>
-<html lang="es">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <title>Bingo · Verificar victoria</title>
-    <link rel="stylesheet" href="estilos/estilos.css">
-</head>
-
-<body>
-    <header></header>
-    <main>
-        <div class="pantalla entra" id="contenido">
-            <h1>Verificar victoria</h1>
-            <form class="formulario" id="formulario">
-                <label>Código de tabla<input id="campoTabla" placeholder="T-001" autocomplete="off" required></label>
-                <label>Premio<select id="campoPremio">
-                        <option value="linea">Línea</option>
-                        <option value="esquinas">Cuatro esquinas</option>
-                        <option value="bingo">Bingo</option>
-                    </select></label>
-                <label>Verificar hasta la jugada<input id="campoJugada" type="number" min="0" required></label>
-                <p class="error" id="error" role="alert"></p>
-                <button class="btn primario" data-ico="verificar">Verificar</button>
-            </form>
-            <div id="zonaResultado" hidden class="pantalla ancha">
-                <div class="resultado" id="resultado"></div>
-                <p class="suave" id="detalle"></p>
-                <div id="tabla"></div>
-            </div>
-            <button class="btn" id="btnVolver" data-ico="volver">Volver al bingo</button>
-        </div>
-    </main>
-    <script src="js/nucleo.js"></script>
-    <script src="js/interfaz.js"></script>
-    <script src="js/verificar.js"></script>
-</body>
-
-</html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Bingo · Verificar victoria</title><link rel="stylesheet" href="estilos/style.css"></head><body><header></header>
+<main><div class="pantalla entra" id="contenido">
+<h1>Verificar victoria</h1>
+<form class="formulario" id="formulario">
+<label>Código de tabla<input id="campoTabla" placeholder="T-001" autocomplete="off" required></label>
+<label>Premio<select id="campoPremio"><option value="linea">Línea</option><option value="esquinas">Cuatro esquinas</option><option value="bingo">Bingo</option></select></label>
+<label>Verificar hasta la jugada<input id="campoJugada" type="number" min="0" required></label>
+<p class="error" id="error" role="alert"></p>
+<button class="btn primario" data-ico="verificar">Verificar</button></form>
+<div id="zonaResultado" hidden class="pantalla ancha"><div class="resultado" id="resultado"></div><p class="suave" id="detalle"></p><div id="tabla"></div></div>
+<button class="btn" id="btnVolver" data-ico="volver">Volver al bingo</button>
+</div></main>
+<script src="js/nucleo.js"></script><script src="js/interfaz.js"></script><script src="js/verificar.js"></script></body></html>

@@ -13,7 +13,7 @@ El anfitrión muestra los números en pantalla (o proyector) y los jugadores los
 
 | Archivo | Vista | Dispositivo |
 |---|---|---|
-| `inicio.html` | Menú con **Anfitrión** y **Jugador** | Ambos |
+| `index.html` | Menú con **Anfitrión** y **Jugador** | Ambos |
 | `anfitrion.html` | Pantalla previa (sala de espera) y dashboard del sorteo | PC |
 | `verificar.html` | Verificación de una tabla reclamada | PC |
 | `jugador.html` | Ingreso de código, elección de tabla y juego | Celular |
@@ -73,34 +73,35 @@ Se muestra al entrar como anfitrión y sirve para que los jugadores se unan ante
 ### 4.2 Dashboard del sorteo (`estado: "en_juego"`)
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│ Sala K7QF · Jugada 12 de 75                  [Nueva partida]   │
-├──────────────┬───────────────────────────┬─────────────────────┤
-│ Historial    │                           │ B  1  2  3 ... 15   │
-│ #12 N15      │      (zona animación)     │ I 16 17 18 ... 30   │
-│ #11 B3       │                           │ N 31 32 33 ... 45   │
-│ #10 O68      │        <h2>N15</h2>       │ G 46 47 48 ... 60   │
-│ #9  G52      │                           │ O 61 62 63 ... 75   │
-│ ...          │                           │                     │
-├──────────────┴───────────────────────────┴─────────────────────┤
-│   [ ▶ Sortear (Espacio) ]        [ ✔ Verificar victoria ]      │
-└────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│ [ Sala K7QF ]                                [Nueva partida]  │
+├────────────┬──────────────────────────────┬───────────────────┤
+│ Jugada  12 │                              │  B   I   N  G   O │
+│ Restan  63 │        ╭──────────╮          │  1  16  31 46  61 │
+│ ▓▓░░░░░░░░ │        │   N15    │          │  2  17  32 47  62 │
+│ Historial  │        ╰──────────╯          │  3  18  33 48  63 │
+│ #12 N15    │      (balota y animación)    │  …   …   …  …   … │
+│ #11 B3     │                              │ 15  30  45 60  75 │
+├────────────┴──────────────────────────────┴───────────────────┤
+│   [ ▶ Sortear (Espacio) ]        [ ✔ Verificar victoria ]     │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 **Zona derecha: tablero general**
-- Muestra los 75 números en filas B, I, N, G y O (15 columnas).
+- Muestra los 75 números en cinco columnas (B, I, N, G y O) de 15 números cada una, ocupando todo el alto disponible.
 - Cada número se **ilumina** cuando sale en el sorteo, siguiendo el orden de la cronología (`jugadas`).
 - El último número salido tiene un resaltado distinto (pulso) para distinguirlo de los anteriores.
 - Al recargar la página, el tablero se reconstruye iluminando todos los números de `jugadas`.
 
 **Zona central: número actual**
-- El número que acaba de salir se muestra en un título `<h2>` grande y centrado, con su letra (`N15`), para que todos los presentes lo vean.
+- El número que acaba de salir se muestra en un título `<h2>` grande dentro de una balota de color de acento (`N15`), para que todos los presentes lo vean.
 - Encima del título está la **zona de animación** del sorteo.
 - Antes del primer sorteo muestra un texto de inicio (por ejemplo "Presiona Espacio para sortear").
 
 **Zona izquierda: información**
+- Tarjetas con la jugada actual y los números restantes, y una barra de progreso del sorteo.
 - Historial de las últimas jugadas con su número de jugada (`#12 N15`).
-- El código de sala y el contador de jugadas aparecen en la franja superior.
+- El código de sala aparece en la franja superior.
 
 **Franja superior**
 - Botón pequeño **Nueva partida**, con confirmación, que vuelve a la pantalla previa con una sala nueva.
@@ -257,11 +258,11 @@ Muestra:
 ```
 bingo/
 ├── README.md
-├── inicio.html
+├── index.html
 ├── anfitrion.html
 ├── verificar.html
 ├── jugador.html
-├── estilos/estilos.css
+├── estilos/style.css
 └── js/
     ├── nucleo.js      # Semillas, tablas, patrones, verificación y localStorage
     ├── interfaz.js    # Iconos SVG, tema claro/oscuro, acento, ayuda y dibujo de tablas
@@ -279,4 +280,4 @@ bingo/
 
 ## 11. Uso
 
-Abre `inicio.html` en el navegador. Para probar en un solo equipo, abre el anfitrión y el jugador en pestañas distintas.
+Abre `index.html` en el navegador. Para probar en un solo equipo, abre el anfitrión y el jugador en pestañas distintas.

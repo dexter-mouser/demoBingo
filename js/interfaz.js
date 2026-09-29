@@ -38,7 +38,7 @@ matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { if 
 
 function montarBarra(titulo) {
   document.querySelector('header').innerHTML = `
-    <a class="marca" href="inicio.html">${ico('bola', 'Bingo')}<span>${titulo}</span></a>
+    <a class="marca" href="index.html">${ico('bola', 'Bingo')}<span>${titulo}</span></a>
     <div class="acciones">
       <div class="muestras" role="group" aria-label="Color de acento">
         ${ACENTOS.map(c => `<button class="muestra" style="background:${c}" data-color="${c}" aria-label="Acento ${c}"></button>`).join('')}
