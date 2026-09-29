@@ -66,7 +66,18 @@ $('btnNueva').onclick = () => {
   if (!confirm('¿Empezar una nueva partida? Se borrará la actual.')) return;
   estado = nuevaPartida(); persistir(); prepararOrden(); pintar();
 };
+function alternarPantallaCompleta() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen?.().catch(() => {});
+}
+document.addEventListener('fullscreenchange', () => {
+  const activa = !!document.fullscreenElement;
+  document.body.classList.toggle('pantalla-completa', activa);
+  $('btnPantalla').querySelector('span').textContent = activa ? 'Salir de pantalla completa' : 'Pantalla completa';
+});
+$('btnPantalla').onclick = alternarPantallaCompleta;
 addEventListener('keydown', e => {
+  if (e.code === 'F5' && !e.ctrlKey) { e.preventDefault(); if (!e.repeat) alternarPantallaCompleta(); return; }
   if (e.repeat || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName) || document.querySelector('dialog[open]')) return;
   const enBoton = e.target.tagName === 'BUTTON';
   if (e.code === 'Enter' && !$('previa').hidden && !enBoton) empezar();

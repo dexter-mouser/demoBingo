@@ -108,12 +108,13 @@ Se muestra al entrar como anfitrión y sirve para que los jugadores se unan ante
 
 ### 4.3 Menú inferior (tipo inventario)
 
-Barra fija en la parte más baja de la pantalla, con casillas grandes como un inventario. Contiene dos opciones:
+Barra fija en la parte más baja de la pantalla, con casillas grandes como un inventario. Contiene tres opciones:
 
 | Opción | Acción | Atajo |
 |---|---|---|
 | **Sortear** | Saca el siguiente número con animación | Clic o barra espaciadora |
 | **Verificar victoria** | Congela la partida y abre la verificación (ver sección 7) | Clic |
+| **Pantalla completa** | Alterna la pantalla completa y oculta la barra superior | Clic o `F5` |
 
 Reglas de las opciones:
 - **Sortear** se deshabilita mientras dura la animación, durante la verificación y cuando ya salieron los 75 números (en ese caso se muestra "Se cantaron todos los números").
@@ -143,6 +144,7 @@ Si se recarga la página durante una animación, la jugada aún no se había gua
 |---|---|---|
 | `Enter` | Previa | Empezar partida |
 | `Espacio` | Dashboard | Sortear |
+| `F5` | Anfitrión | Pantalla completa (no recarga la página) |
 
 Reglas de la barra espaciadora:
 - Se evita el desplazamiento de la página (`preventDefault`).
