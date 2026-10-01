@@ -21,7 +21,7 @@ label{display:grid;gap:6px;font-weight:600}.formulario{display:grid;gap:14px;max
 input,select{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--borde);background:var(--panel);color:var(--texto);font:inherit}
 .error{color:var(--texto);font-weight:600}
 .hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;padding:24px 0}.hero>div{display:grid;gap:20px;justify-items:center;text-align:center}
-.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.1}.hero svg{width:100%;max-width:440px;justify-self:center}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.1}.hero>svg{width:100%;max-width:440px;justify-self:center}
 .chips,.accesos{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}.accesos .btn{min-width:190px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--borde);border-radius:999px;background:var(--panel);font-size:.9rem}.chip .ico{color:var(--acento);width:18px;height:18px}
 .previa{display:grid;justify-items:center;text-align:center;gap:18px;padding:40px 16px;max-width:640px;margin:24px auto}
@@ -67,3 +67,4 @@ dialog[open]{animation:entrar .2s ease}dialog::backdrop{background:#0008}dialog 
 @media(max-width:900px){#juego:not([hidden]){height:auto}}
 @media(max-width:600px){main{padding:12px}}
 .historia{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--acento) 14%,var(--panel));border-left:4px solid var(--acento);margin:8px 0 12px}
+.pestanas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}dialog{max-height:88vh;overflow:auto}

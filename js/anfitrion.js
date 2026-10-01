@@ -1,17 +1,4 @@
 const DURACION_ANIMACION_MS = 2500;
-const AYUDA_ANFITRION = {
-  titulo: 'Cómo administrar la sala',
-  historia: 'Como anfitrión, quiero abrir una sala, sacar los números uno por uno y revisar quién gana, para que todos jueguen limpio y se diviertan.',
-  pasos: [
-    '<b>Abre la sala:</b> sale un código de 4 letras, como una llave mágica. Díselo a tus amigos para que entren con su celular.',
-    '<b>Empieza:</b> pulsa «Empezar partida» (o la tecla Enter). ¡Ya están jugando todos!',
-    '<b>Saca un número:</b> pulsa «Sortear» o la barra espaciadora. La bolita gira y se detiene. Dile el número en voz alta a todos.',
-    '<b>Espera:</b> no puedes sortear otra vez hasta que la bolita se detenga. Así no te saltas ninguno.',
-    '<b>¿Alguien gritó «Bingo»?</b> Pulsa «Verificar victoria». El juego se queda quieto, como en una foto.',
-    '<b>Mira su tabla:</b> escribe el número de su tabla (por ejemplo 001), elige qué dice que ganó y pulsa «Verificar». Verás VÁLIDO o INVÁLIDO.',
-    '<b>Sigue jugando:</b> pulsa «Volver al bingo» y el juego continúa justo donde lo dejaste.'
-  ]
-};
 montarBarra('Anfitrión', AYUDA_ANFITRION);
 
 const nuevaPartida = () => ({ codigoSala: generarCodigo(), semillaSorteo: crearSemilla(), jugadas: [], estado: 'esperando', reclamoActual: null, premiosEntregados: [] });

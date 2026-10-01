@@ -36,18 +36,40 @@ function aplicarTema() {
 aplicarTema();
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { if (leer('tema', null) === null) aplicarTema(); });
 
-const AYUDA_JUGAR = {
+const AYUDA_JUGADOR = {
   titulo: 'Cómo jugar',
-  historia: '',
+  pestana: 'Soy jugador',
+  historia: 'Como jugador, quiero entrar a la sala de mi anfitrión con un código, elegir mi tabla y marcar los números que van saliendo, para poder gritar «¡Bingo!» cuando complete mi tabla y ganar.',
   pasos: [
-    '<b>Anfitrión (PC):</b> crea la sala, comparte el código y pulsa «Empezar partida». Sortea con el botón o con la barra espaciadora.',
-    '<b>Jugador (celular):</b> escribe el código, elige una tabla y marca los números que el anfitrión va cantando.',
-    'Al completar una línea, dos líneas, las cuatro esquinas, una X o el bingo se habilita «Cantar premio». Avisa en voz alta y muestra el código de tu tabla.',
-    'El anfitrión pulsa «Verificar victoria» y escribe el código de tu tabla. Solo se revisan los números hasta la jugada en que cantaste.'
+    '<b>Pide la llave:</b> tu anfitrión tiene un código de 4 letras o números, como una llave secreta. Pídeselo y escríbelo para entrar a su sala.',
+    '<b>Escoge tu tabla:</b> verás muchos números (001, 002…). Toca uno para ver cómo es tu tabla. Si te gusta, pulsa «Jugar con esta tabla». ¡Acuérdate de su número, es su nombre secreto!',
+    '<b>Escucha y mira:</b> el anfitrión dice un número en voz alta, como «B7». Búscalo en tu tabla.',
+    '<b>Márcalo:</b> si lo tienes, tócalo y se pinta de color. Si te equivocas, tócalo otra vez. La estrella del centro ya viene marcada.',
+    '<b>Completa un premio:</b> puedes ganar con una línea, dos líneas, las cuatro esquinas, una X o la tabla llena (bingo). Cuando lo logres, se enciende el botón «Cantar premio».',
+    '<b>¡Cántalo!:</b> pulsa «Cantar premio», grita fuerte y enséñale tu pantalla al anfitrión.',
+    '<b>Espera la revisión:</b> el anfitrión mira tu tabla solo hasta el momento en que cantaste. Si todo está bien, ¡ganaste! Si no, sigue jugando.',
+    '<b>¿Quieres otra sala?</b> Pulsa «Cambiar de código» debajo de tu tabla y escribe el código nuevo. Ojo: se borran tus marcas.',
+    'Tus marcas se guardan en el celular, así que puedes cerrar la página y volver sin perderlas.'
+  ]
+};
+const AYUDA_ANFITRION = {
+  titulo: 'Cómo administrar la sala',
+  pestana: 'Soy anfitrión',
+  historia: 'Como anfitrión, quiero abrir una sala, sacar los números uno por uno y revisar quién gana, para que todos jueguen limpio y se diviertan.',
+  pasos: [
+    '<b>Abre la sala:</b> sale un código de 4 letras, como una llave mágica. Díselo a tus amigos para que entren con su celular.',
+    '<b>Empieza:</b> pulsa «Empezar partida» (o la tecla Enter). ¡Ya están jugando todos!',
+    '<b>Saca un número:</b> pulsa «Sortear» o la barra espaciadora. La bolita gira y se detiene. Dile el número en voz alta a todos.',
+    '<b>Espera:</b> no puedes sortear otra vez hasta que la bolita se detenga. Así no te saltas ninguno.',
+    '<b>¿Alguien gritó «Bingo»?</b> Pulsa «Verificar victoria». El juego se queda quieto, como en una foto.',
+    '<b>Mira su tabla:</b> escribe el número de su tabla (por ejemplo 001), elige qué dice que ganó y pulsa «Verificar». Verás VÁLIDO o INVÁLIDO.',
+    '<b>Sigue jugando:</b> pulsa «Volver al bingo» y el juego continúa justo donde lo dejaste.'
   ]
 };
 
-function montarBarra(titulo, ayuda = AYUDA_JUGAR) {
+function montarBarra(titulo, ayuda = [AYUDA_JUGADOR, AYUDA_ANFITRION]) {
+  const guias = Array.isArray(ayuda) ? ayuda : [ayuda];
+  const tituloAyuda = guias.length > 1 ? 'Cómo jugar' : guias[0].titulo;
   document.querySelector('header').innerHTML = `
     <a class="marca" href="index.html">${ico('bola', 'Bingo')}<span>${titulo}</span></a>
     <div class="acciones">
@@ -55,7 +77,7 @@ function montarBarra(titulo, ayuda = AYUDA_JUGAR) {
         ${ACENTOS.map(c => `<button class="muestra" style="background:${c}" data-color="${c}" aria-label="Acento ${c}"></button>`).join('')}
         <input type="color" id="selectorAcento" aria-label="Elegir otro color de acento" value="${leer('acento', ACENTOS[0])}">
       </div>
-      <button class="btn icono" data-ayuda aria-label="${ayuda.titulo}">${ico('ayuda', ayuda.titulo)}</button>
+      <button class="btn icono" data-ayuda aria-label="${tituloAyuda}">${ico('ayuda', tituloAyuda)}</button>
       <button class="btn icono" id="btnTema" aria-label="Alternar tema claro y oscuro"></button>
     </div>`;
   const cambiarAcento = color => { guardar('acento', color); aplicarTema(); };
@@ -65,10 +87,15 @@ function montarBarra(titulo, ayuda = AYUDA_JUGAR) {
   aplicarTema();
 
   const dialogo = document.createElement('dialog');
-  dialogo.innerHTML = `<h2>${ayuda.titulo}</h2>${ayuda.historia ? `<p class="historia">${ayuda.historia}</p>` : ''}<ol>${ayuda.pasos.map(paso => `<li>${paso}</li>`).join('')}</ol>
-    <button class="btn primario" id="cerrarAyuda">Entendido</button>`;
+  dialogo.innerHTML = (guias.length > 1 ? `<div class="pestanas" role="tablist">${guias.map((guia, i) => `<button class="btn${i ? '' : ' primario'}" role="tab" aria-selected="${!i}" data-pestana="${i}">${guia.pestana}</button>`).join('')}</div>` : '') +
+    guias.map((guia, i) => `<section class="guia" data-guia="${i}"${i ? ' hidden' : ''}><h2>${guia.titulo}</h2>${guia.historia ? `<p class="historia">${guia.historia}</p>` : ''}<ol>${guia.pasos.map(paso => `<li>${paso}</li>`).join('')}</ol></section>`).join('') +
+    `<button class="btn primario" id="cerrarAyuda">Entendido</button>`;
   document.body.append(dialogo);
   $('cerrarAyuda').onclick = () => dialogo.close();
+  dialogo.querySelectorAll('[data-pestana]').forEach(boton => boton.onclick = () => {
+    dialogo.querySelectorAll('[data-pestana]').forEach(b => { const activa = b === boton; b.classList.toggle('primario', activa); b.setAttribute('aria-selected', activa); });
+    dialogo.querySelectorAll('.guia').forEach(guia => guia.hidden = guia.dataset.guia !== boton.dataset.pestana);
+  });
   document.querySelectorAll('[data-ayuda]').forEach(b => b.onclick = () => dialogo.showModal());
   document.querySelectorAll('[data-ico]').forEach(e => e.insertAdjacentHTML('afterbegin', ico(e.dataset.ico, e.textContent.trim())));
 }

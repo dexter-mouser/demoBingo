@@ -1,4 +1,4 @@
-montarBarra('Jugador');
+montarBarra('Jugador', AYUDA_JUGADOR);
 const PANTALLAS = ['pantallaCodigo', 'pantallaTablas', 'pantallaJuego', 'pantallaReclamo'];
 const marcasIniciales = () => Object.assign(Array(25).fill(false), { 12: true });
 let datos = leer('jugador', { codigoSala: '', idTabla: '', marcas: marcasIniciales() });
@@ -43,7 +43,12 @@ $('formCodigo').onsubmit = e => {
 };
 $('btnOtroCodigo').onclick = () => irA('pantallaCodigo');
 $('btnElegir').onclick = () => { datos.idTabla = tablaElegida; datos.marcas = marcasIniciales(); persistir(); pintarJuego(); irA('pantallaJuego'); };
-$('btnCambiar').onclick = () => { if (confirm('¿Cambiar de tabla? Se perderán tus marcas.')) mostrarCatalogo(); };
+$('btnCambiar').onclick = () => {
+  if (!confirm('¿Cambiar de código? Saldrás de esta sala y se borrarán tus marcas.')) return;
+  datos = { codigoSala: '', idTabla: '', marcas: marcasIniciales() }; persistir();
+  $('campoCodigo').value = '';
+  irA('pantallaCodigo');
+};
 $('btnPremio').onclick = () => {
   const premios = premiosPosibles(datos.marcas);
   if (!premios.length) return;

@@ -1,4 +1,4 @@
-montarBarra('Verificar victoria');
+montarBarra('Verificar victoria', AYUDA_ANFITRION);
 $('campoPremio').innerHTML = Object.entries(NOMBRES_PREMIO).map(([tipo, nombre]) => `<option value="${tipo}">${nombre}</option>`).join('');
 const estado = leer('anfitrion', null);
 $('btnVolver').onclick = () => {
