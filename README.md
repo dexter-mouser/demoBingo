@@ -184,6 +184,7 @@ La barra espaciadora se ignora si el foco está en un campo de texto, si la tecl
 
 - **Tema:** claro y oscuro definidos con variables CSS. Por defecto sigue la preferencia del sistema hasta que se pulsa el botón de sol o luna.
 - **Color de acento:** cinco colores predefinidos o un selector libre; se usa en botones principales, iconos activos y elementos destacados, y se guarda en el navegador. El color del texto sobre el acento se ajusta solo para mantener el contraste.
+- **Icono:** la aplicación tiene un icono SVG (`img/icono.svg`) en verde `#008608`, que también es uno de los colores de acento predefinidos.
 - **Ayuda:** botón en la barra superior. En el inicio muestra dos pestañas, «Soy jugador» y «Soy anfitrión»; en la vista del jugador solo explica cómo jugar y en la del anfitrión solo cómo administrar la sala. Ambas guías incluyen una historia de usuario y pasos muy sencillos.
 - **Gráficos:** iconos e ilustraciones en SVG en línea que heredan los colores del tema; tipografía del sistema, sin fuentes ni librerías externas.
 - **Accesibilidad:** contraste suficiente en ambos temas, `aria-label` en los SVG, áreas seguras del dispositivo (notch y barra inferior) y transiciones breves que se desactivan si el sistema pide reducir el movimiento.
@@ -201,6 +202,8 @@ bingo/
 ├── jugador.html
 ├── estilos/
 │   └── style.css
+├── img/
+│   └── icono.svg
 └── js/
     ├── nucleo.js      # Semillas, tablas, premios, verificación y localStorage
     ├── interfaz.js    # Iconos SVG, tema, acento, guías de ayuda y dibujo de tablas

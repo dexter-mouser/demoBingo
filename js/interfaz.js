@@ -16,7 +16,7 @@ const ICONOS = {
 const ico = (nombre, etiqueta) => `<svg class="ico" viewBox="0 0 24 24" role="img" aria-label="${etiqueta || nombre}">${ICONOS[nombre]}</svg>`;
 const $ = id => document.getElementById(id);
 
-const ACENTOS = ['#4f46e5', '#0f766e', '#be123c', '#b45309', '#0369a1'];
+const ACENTOS = ['#4f46e5', '#008608', '#be123c', '#b45309', '#0369a1'];
 function luminancia(hex) {
   const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.substr(i, 2), 16) / 255)
     .map(v => v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
