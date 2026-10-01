@@ -42,12 +42,12 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 
 ## 3. Pantallas
 
-| Archivo | Pantalla | Dispositivo |
-|---|---|---|
-| `index.html` | Inicio con accesos a Anfitrión y Jugador y botón **Cómo jugar** | Ambos |
-| `anfitrion.html` | Pantalla previa y dashboard del sorteo | PC |
-| `verificar.html` | Verificación de una tabla | PC |
-| `jugador.html` | Código de sala, catálogo de tablas, juego y reclamo | Celular |
+| Archivo          | Pantalla                                                        | Dispositivo |
+| ---------------- | --------------------------------------------------------------- | ----------- |
+| `index.html`     | Inicio con accesos a Anfitrión y Jugador y botón **Cómo jugar** | Ambos       |
+| `anfitrion.html` | Pantalla previa y dashboard del sorteo                          | PC          |
+| `verificar.html` | Verificación de una tabla                                       | PC          |
+| `jugador.html`   | Código de sala, catálogo de tablas, juego y reclamo             | Celular     |
 
 ### Dashboard del anfitrión
 
@@ -79,10 +79,10 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 ### Sala y semillas
 Al crear la sala se generan dos valores aleatorios:
 
-| Valor | Quién lo conoce | Para qué sirve |
-|---|---|---|
+| Valor                       | Quién lo conoce       | Para qué sirve                                                     |
+| --------------------------- | --------------------- | ------------------------------------------------------------------ |
 | `codigoSala` (4 caracteres) | Anfitrión y jugadores | Genera el catálogo de tablas. Los jugadores lo escriben al entrar. |
-| `semillaSorteo` (número) | Solo el anfitrión | Define el orden completo en que salen los 75 números. |
+| `semillaSorteo` (número)    | Solo el anfitrión     | Define el orden completo en que salen los 75 números.              |
 
 Se mantienen separados para que ningún jugador pueda calcular los números futuros a partir del código que conoce. Ambos valores usan un generador pseudoaleatorio con semilla (mulberry32): la misma semilla siempre produce la misma secuencia, lo que permite recuperar el sorteo al recargar la página.
 
@@ -91,13 +91,13 @@ Se mantienen separados para que ningún jugador pueda calcular los números futu
 - El código de tabla son solo tres dígitos (`001` a `060`). En la verificación basta escribir `1` para que se complete a `001`.
 - Cada tabla es de 5×5 y no repite números:
 
-| Columna | Rango | Cantidad |
-|---|---|---|
-| B | 1–15 | 5 números |
-| I | 16–30 | 5 números |
-| N | 31–45 | 4 números + casilla libre al centro |
-| G | 46–60 | 5 números |
-| O | 61–75 | 5 números |
+| Columna | Rango | Cantidad                            |
+| ------- | ----- | ----------------------------------- |
+| B       | 1–15  | 5 números                           |
+| I       | 16–30 | 5 números                           |
+| N       | 31–45 | 4 números + casilla libre al centro |
+| G       | 46–60 | 5 números                           |
+| O       | 61–75 | 5 números                           |
 
 ### Sorteo
 - El siguiente número es siempre el que sigue en el orden definido por `semillaSorteo`. La animación es solo visual.
@@ -110,13 +110,13 @@ Se mantienen separados para que ningún jugador pueda calcular los números futu
 
 ### Premios
 
-| Premio | Condición |
-|---|---|
-| Línea | Una fila, columna o diagonal completa |
-| Dos líneas | Dos filas, columnas o diagonales completas, en cualquier combinación |
-| Cuatro esquinas | Las cuatro esquinas de la tabla |
-| X | Las dos diagonales completas |
-| Bingo | Las 25 casillas |
+| Premio          | Condición                                                            |
+| --------------- | -------------------------------------------------------------------- |
+| Línea           | Una fila, columna o diagonal completa                                |
+| Dos líneas      | Dos filas, columnas o diagonales completas, en cualquier combinación |
+| Cuatro esquinas | Las cuatro esquinas de la tabla                                      |
+| X               | Las dos diagonales completas                                         |
+| Bingo           | Las 25 casillas                                                      |
 
 La casilla libre del centro siempre cuenta como marcada. Los patrones están definidos como datos en `nucleo.js`, por lo que se pueden agregar otros sin cambiar la lógica de verificación.
 
@@ -170,11 +170,11 @@ Cada acción del anfitrión guarda el estado completo. Al recargar, retoma la pa
 
 ## 5. Atajos de teclado
 
-| Tecla | Dónde | Acción |
-|---|---|---|
-| `Enter` | Pantalla previa | Empezar partida |
-| `Espacio` | Dashboard | Sortear |
-| `F5` | Anfitrión | Pantalla completa (no recarga la página) |
+| Tecla     | Dónde           | Acción                                   |
+| --------- | --------------- | ---------------------------------------- |
+| `Enter`   | Pantalla previa | Empezar partida                          |
+| `Espacio` | Dashboard       | Sortear                                  |
+| `F5`      | Anfitrión       | Pantalla completa (no recarga la página) |
 
 La barra espaciadora se ignora si el foco está en un campo de texto, si la tecla se mantiene presionada o si **Sortear** está deshabilitado. En pantalla completa se oculta la barra superior para aprovechar todo el espacio.
 

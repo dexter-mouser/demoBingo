@@ -68,7 +68,7 @@ $('btnNueva').onclick = () => {
 };
 function alternarPantallaCompleta() {
   if (document.fullscreenElement) document.exitFullscreen();
-  else document.documentElement.requestFullscreen?.().catch(() => {});
+  else document.documentElement.requestFullscreen?.().catch(() => { });
 }
 document.addEventListener('fullscreenchange', () => {
   const activa = !!document.fullscreenElement;

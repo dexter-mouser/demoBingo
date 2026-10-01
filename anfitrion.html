@@ -1,13 +1,66 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Bingo · Anfitrión</title><link rel="icon" href="img/icono.svg" type="image/svg+xml"><link rel="stylesheet" href="estilos/style.css"></head><body><header></header>
-<main>
-<section id="previa" class="panel previa entra" hidden><h1>Sala lista</h1><p class="suave">Comparte este código con los jugadores</p><div class="codigo" id="codigoGrande" aria-live="polite"></div><button class="btn primario" id="btnEmpezar" data-ico="jugar">Empezar partida</button><p class="suave">También puedes pulsar Enter</p></section>
-<section id="juego" hidden>
-<div class="franja"><p class="pastilla">Sala <b id="codigoSala"></b></p><button class="btn" id="btnNueva">Nueva partida</button></div>
-<div class="tablero-anfitrion">
-<aside class="panel lateral"><div class="tarjetas"><div class="tarjeta"><span class="suave">Jugada</span><b id="contador">0</b></div><div class="tarjeta"><span class="suave">Restan</span><b id="restantes">75</b></div></div><div class="progreso" role="progressbar" aria-label="Progreso del sorteo"><span id="barra"></span></div><h3>Historial</h3><ol class="historial" id="historial"></ol></aside>
-<div class="panel centro"><div class="escenario" id="escenario"><svg viewBox="0 0 100 100" role="img" aria-label="Balota del sorteo"><circle cx="50" cy="50" r="48" fill="var(--acento)"/><circle cx="50" cy="50" r="37" fill="var(--panel)"/><circle cx="50" cy="50" r="43" fill="none" stroke="var(--sobre-acento)" stroke-width="2" stroke-linecap="round" stroke-dasharray="14 40"/></svg><h2 id="numeroActual" aria-live="polite">—</h2></div><p class="suave" id="mensaje"></p></div>
-<div class="panel"><div class="numeros" id="numeros" aria-label="Tablero de números"></div></div>
-</div>
-<nav class="menu-inferior" aria-label="Opciones del anfitrión"><button class="btn primario ranura" id="btnSortear" data-ico="jugar"><span>Sortear</span><small>Espacio</small></button><button class="btn acento ranura" id="btnVerificar" data-ico="verificar"><span>Verificar victoria</span></button><button class="btn ranura" id="btnPantalla" data-ico="pantalla"><span>Pantalla completa</span><small>F5</small></button></nav>
-</section></main>
-<script src="js/nucleo.js"></script><script src="js/interfaz.js"></script><script src="js/anfitrion.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>Bingo · Anfitrión</title>
+    <link rel="icon" href="img/icono.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="estilos/style.css">
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <section id="previa" class="panel previa entra" hidden>
+            <h1>Sala lista</h1>
+            <p class="suave">Comparte este código con los jugadores</p>
+            <div class="codigo" id="codigoGrande" aria-live="polite"></div><button class="btn primario" id="btnEmpezar"
+                data-ico="jugar">Empezar partida</button>
+            <p class="suave">También puedes pulsar Enter</p>
+        </section>
+        <section id="juego" hidden>
+            <div class="franja">
+                <p class="pastilla">Sala <b id="codigoSala"></b></p><button class="btn" id="btnNueva">Nueva
+                    partida</button>
+            </div>
+            <div class="tablero-anfitrion">
+                <aside class="panel lateral">
+                    <div class="tarjetas">
+                        <div class="tarjeta"><span class="suave">Jugada</span><b id="contador">0</b></div>
+                        <div class="tarjeta"><span class="suave">Restan</span><b id="restantes">75</b></div>
+                    </div>
+                    <div class="progreso" role="progressbar" aria-label="Progreso del sorteo"><span id="barra"></span>
+                    </div>
+                    <h3>Historial</h3>
+                    <ol class="historial" id="historial"></ol>
+                </aside>
+                <div class="panel centro">
+                    <div class="escenario" id="escenario"><svg viewBox="0 0 100 100" role="img"
+                            aria-label="Balota del sorteo">
+                            <circle cx="50" cy="50" r="48" fill="var(--acento)" />
+                            <circle cx="50" cy="50" r="37" fill="var(--panel)" />
+                            <circle cx="50" cy="50" r="43" fill="none" stroke="var(--sobre-acento)" stroke-width="2"
+                                stroke-linecap="round" stroke-dasharray="14 40" />
+                        </svg>
+                        <h2 id="numeroActual" aria-live="polite">—</h2>
+                    </div>
+                    <p class="suave" id="mensaje"></p>
+                </div>
+                <div class="panel">
+                    <div class="numeros" id="numeros" aria-label="Tablero de números"></div>
+                </div>
+            </div>
+            <nav class="menu-inferior" aria-label="Opciones del anfitrión"><button class="btn primario ranura"
+                    id="btnSortear" data-ico="jugar"><span>Sortear</span><small>Espacio</small></button><button
+                    class="btn acento ranura" id="btnVerificar" data-ico="verificar"><span>Verificar
+                        victoria</span></button><button class="btn ranura" id="btnPantalla"
+                    data-ico="pantalla"><span>Pantalla completa</span><small>F5</small></button></nav>
+        </section>
+    </main>
+    <script src="js/nucleo.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/anfitrion.js"></script>
+</body>
+
+</html>
