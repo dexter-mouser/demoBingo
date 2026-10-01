@@ -2,6 +2,7 @@ montarBarra('Jugador');
 const PANTALLAS = ['pantallaCodigo', 'pantallaTablas', 'pantallaJuego', 'pantallaReclamo'];
 const marcasIniciales = () => Object.assign(Array(25).fill(false), { 12: true });
 let datos = leer('jugador', { codigoSala: '', idTabla: '', marcas: marcasIniciales() });
+if (datos.idTabla && !esTablaValida(datos.idTabla)) datos.idTabla = '';
 let tablaElegida = '';
 const persistir = () => guardar('jugador', datos);
 

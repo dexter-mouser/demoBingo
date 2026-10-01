@@ -36,7 +36,18 @@ function aplicarTema() {
 aplicarTema();
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { if (leer('tema', null) === null) aplicarTema(); });
 
-function montarBarra(titulo) {
+const AYUDA_JUGAR = {
+  titulo: 'Cómo jugar',
+  historia: '',
+  pasos: [
+    '<b>Anfitrión (PC):</b> crea la sala, comparte el código y pulsa «Empezar partida». Sortea con el botón o con la barra espaciadora.',
+    '<b>Jugador (celular):</b> escribe el código, elige una tabla y marca los números que el anfitrión va cantando.',
+    'Al completar una línea, dos líneas, las cuatro esquinas, una X o el bingo se habilita «Cantar premio». Avisa en voz alta y muestra el código de tu tabla.',
+    'El anfitrión pulsa «Verificar victoria» y escribe el código de tu tabla. Solo se revisan los números hasta la jugada en que cantaste.'
+  ]
+};
+
+function montarBarra(titulo, ayuda = AYUDA_JUGAR) {
   document.querySelector('header').innerHTML = `
     <a class="marca" href="index.html">${ico('bola', 'Bingo')}<span>${titulo}</span></a>
     <div class="acciones">
@@ -44,7 +55,7 @@ function montarBarra(titulo) {
         ${ACENTOS.map(c => `<button class="muestra" style="background:${c}" data-color="${c}" aria-label="Acento ${c}"></button>`).join('')}
         <input type="color" id="selectorAcento" aria-label="Elegir otro color de acento" value="${leer('acento', ACENTOS[0])}">
       </div>
-      <button class="btn icono" data-ayuda aria-label="Cómo jugar">${ico('ayuda', 'Cómo jugar')}</button>
+      <button class="btn icono" data-ayuda aria-label="${ayuda.titulo}">${ico('ayuda', ayuda.titulo)}</button>
       <button class="btn icono" id="btnTema" aria-label="Alternar tema claro y oscuro"></button>
     </div>`;
   const cambiarAcento = color => { guardar('acento', color); aplicarTema(); };
@@ -54,11 +65,7 @@ function montarBarra(titulo) {
   aplicarTema();
 
   const dialogo = document.createElement('dialog');
-  dialogo.innerHTML = `<h2>Cómo jugar</h2><ol>
-    <li><b>Anfitrión (PC):</b> crea la sala, comparte el código y pulsa «Empezar partida». Sortea con el botón o con la barra espaciadora.</li>
-    <li><b>Jugador (celular):</b> escribe el código, elige una tabla y marca los números que el anfitrión va cantando.</li>
-    <li>Al completar una línea, las cuatro esquinas o el bingo se habilita «Cantar premio». Avisa en voz alta y muestra el código de tu tabla.</li>
-    <li>El anfitrión pulsa «Verificar victoria» y escribe el código de tu tabla. Solo se revisan los números hasta la jugada en que cantaste.</li></ol>
+  dialogo.innerHTML = `<h2>${ayuda.titulo}</h2>${ayuda.historia ? `<p class="historia">${ayuda.historia}</p>` : ''}<ol>${ayuda.pasos.map(paso => `<li>${paso}</li>`).join('')}</ol>
     <button class="btn primario" id="cerrarAyuda">Entendido</button>`;
   document.body.append(dialogo);
   $('cerrarAyuda').onclick = () => dialogo.close();

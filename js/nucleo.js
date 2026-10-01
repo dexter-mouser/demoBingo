@@ -34,8 +34,9 @@ function barajar(lista, aleatorio) {
 const crearSemilla = () => Math.floor(Math.random() * 2 ** 32);
 const generarCodigo = () => Array.from({ length: 4 }, () => ALFABETO[Math.floor(Math.random() * ALFABETO.length)]).join('');
 const letraDe = numero => LETRAS[Math.floor((numero - 1) / 15)];
-const nombreTabla = n => 'T-' + String(n).padStart(3, '0');
-const esTablaValida = id => /^T-\d{3}$/.test(id) && +id.slice(2) >= 1 && +id.slice(2) <= TOTAL_TABLAS;
+const nombreTabla = n => String(n).padStart(3, '0');
+const esTablaValida = id => /^\d{3}$/.test(id) && +id >= 1 && +id <= TOTAL_TABLAS;
+const normalizarTabla = texto => { const digitos = texto.replace(/\D/g, ''); return digitos ? digitos.padStart(3, '0') : ''; };
 
 // Tabla 5x5 en orden de filas; el centro es la casilla libre
 function generarTabla(codigoSala, idTabla) {
@@ -54,14 +55,19 @@ function generarTabla(codigoSala, idTabla) {
 
 const filasTabla = [0, 1, 2, 3, 4].map(f => [0, 1, 2, 3, 4].map(c => f * 5 + c));
 const columnasTabla = [0, 1, 2, 3, 4].map(c => [0, 1, 2, 3, 4].map(f => f * 5 + c));
+const LINEAS = [...filasTabla, ...columnasTabla, [0, 6, 12, 18, 24], [4, 8, 12, 16, 20]];
 const PATRONES = {
-  linea: [...filasTabla, ...columnasTabla, [0, 6, 12, 18, 24], [4, 8, 12, 16, 20]],
+  linea: LINEAS,
   esquinas: [[0, 4, 20, 24]],
+  equis: [[0, 4, 6, 8, 12, 16, 18, 20, 24]],
   bingo: [Array.from({ length: 25 }, (_, i) => i)]
 };
-const NOMBRES_PREMIO = { linea: 'Línea', esquinas: 'Cuatro esquinas', bingo: 'Bingo' };
-const cumplePatron = (marcadas, tipo) => PATRONES[tipo].some(patron => patron.every(i => marcadas[i]));
-const premiosPosibles = marcadas => Object.keys(PATRONES).filter(tipo => cumplePatron(marcadas, tipo));
+const NOMBRES_PREMIO = { linea: 'Línea', dosLineas: 'Dos líneas', esquinas: 'Cuatro esquinas', equis: 'X', bingo: 'Bingo' };
+const contarLineas = marcadas => LINEAS.filter(linea => linea.every(i => marcadas[i])).length;
+const cumplePatron = (marcadas, tipo) => tipo === 'dosLineas'
+  ? contarLineas(marcadas) >= 2
+  : PATRONES[tipo].some(patron => patron.every(i => marcadas[i]));
+const premiosPosibles = marcadas => Object.keys(NOMBRES_PREMIO).filter(tipo => cumplePatron(marcadas, tipo));
 
 // Solo cuentan las primeras "hastaJugada" jugadas del anfitrión
 function verificarReclamo(codigoSala, idTabla, tipo, jugadas, hastaJugada) {

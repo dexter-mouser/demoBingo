@@ -40,7 +40,7 @@ Se usa un generador pseudoaleatorio determinista (por ejemplo **mulberry32**). C
 
 ## 3. Tablas predefinidas
 
-- Al ingresar el `codigoSala`, el celular genera un catálogo de tablas numeradas (`T-001`, `T-002`, …).
+- Al ingresar el `codigoSala`, el celular genera un catálogo de tablas numeradas (`001`, `002`, …).
 - Cada tabla se obtiene con `generarTabla(codigoSala, idTabla)`, así el anfitrión y el jugador construyen exactamente la misma tabla.
 - Reglas de cada tabla (5×5):
 
@@ -175,7 +175,9 @@ Reglas de la barra espaciadora:
 ### Condiciones de victoria
 Se definen como listas de posiciones de la tabla 5×5:
 - **Línea**: cualquier fila, columna o diagonal completa.
+- **Dos líneas**: dos filas, columnas o diagonales completas, en cualquier combinación.
 - **Cuatro esquinas**.
+- **X**: las dos diagonales completas.
 - **Bingo**: las 25 casillas.
 - Se pueden agregar patrones nuevos como datos, sin tocar la lógica de verificación.
 
@@ -277,7 +279,7 @@ bingo/
 
 - **Tema:** sigue la preferencia del sistema hasta que se pulsa el botón de sol o luna.
 - **Color de acento:** cinco colores predefinidos o un selector libre; se guarda en el navegador.
-- **Cómo jugar:** botón de ayuda en la barra superior de todas las pantallas.
+- **Ayuda:** botón en la barra superior. En el anfitrión explica, con una historia de usuario y pasos muy sencillos, cómo administrar la sala; en las demás pantallas explica cómo jugar.
 - **Movimiento reducido:** si el sistema lo pide, se desactivan transiciones y el sorteo se muestra al instante.
 
 ## 11. Uso

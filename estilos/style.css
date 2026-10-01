@@ -66,3 +66,4 @@ dialog[open]{animation:entrar .2s ease}dialog::backdrop{background:#0008}dialog 
 #tablero .casilla.marcada,#vistaPrevia .casilla.marcada{transform:scale(.93);box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--sobre-acento) 55%,transparent)}
 @media(max-width:900px){#juego:not([hidden]){height:auto}}
 @media(max-width:600px){main{padding:12px}}
+.historia{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--acento) 14%,var(--panel));border-left:4px solid var(--acento);margin:8px 0 12px}

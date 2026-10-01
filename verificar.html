@@ -2,8 +2,8 @@
 <main><div class="pantalla entra" id="contenido">
 <h1>Verificar victoria</h1>
 <form class="formulario" id="formulario">
-<label>Código de tabla<input id="campoTabla" placeholder="T-001" autocomplete="off" required></label>
-<label>Premio<select id="campoPremio"><option value="linea">Línea</option><option value="esquinas">Cuatro esquinas</option><option value="bingo">Bingo</option></select></label>
+<label>Código de tabla<input id="campoTabla" placeholder="001" inputmode="numeric" maxlength="3" autocomplete="off" required></label>
+<label>Premio<select id="campoPremio"></select></label>
 <label>Verificar hasta la jugada<input id="campoJugada" type="number" min="0" required></label>
 <p class="error" id="error" role="alert"></p>
 <button class="btn primario" data-ico="verificar">Verificar</button></form>

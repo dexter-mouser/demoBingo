@@ -1,4 +1,5 @@
 montarBarra('Verificar victoria');
+$('campoPremio').innerHTML = Object.entries(NOMBRES_PREMIO).map(([tipo, nombre]) => `<option value="${tipo}">${nombre}</option>`).join('');
 const estado = leer('anfitrion', null);
 $('btnVolver').onclick = () => {
   if (estado) { estado.estado = 'en_juego'; estado.reclamoActual = null; guardar('anfitrion', estado); }
@@ -14,8 +15,8 @@ if (!estado) {
   $('campoJugada').value = estado.reclamoActual?.jugadaCongelada ?? total;
   $('formulario').onsubmit = evento => {
     evento.preventDefault();
-    const idTabla = $('campoTabla').value.trim().toUpperCase();
-    if (!esTablaValida(idTabla)) { $('error').textContent = `Código de tabla no válido. Usa de T-001 a T-${String(TOTAL_TABLAS).padStart(3, '0')}.`; return; }
+    const idTabla = normalizarTabla($('campoTabla').value);
+    if (!esTablaValida(idTabla)) { $('error').textContent = `Código de tabla no válido. Usa de 001 a ${nombreTabla(TOTAL_TABLAS)}.`; return; }
     $('error').textContent = '';
     const hasta = Math.min(total, Math.max(0, +$('campoJugada').value || 0));
     const tipo = $('campoPremio').value;
