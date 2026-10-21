@@ -12,6 +12,15 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 ## 1. Utilidades
 
 - Sorteo de los números 1–75 con animación visible de 2 a 3 segundos.
+- Sorteo automático con intervalos de 5, 8, 12 o 20 segundos y voz que canta cada número, con botón de silencio.
+- Mensaje con hora y segundos al cantar un premio, que el anfitrión puede usar para ubicar la jugada exacta.
+- Aviso «¡Te falta 1!» en el celular del jugador y patrón ganador resaltado al verificar.
+- Vibración al marcar en celular y pantalla encendida en PC.
+- Al abrir el anfitrión con una partida guardada se ofrece continuarla o empezar una nueva.
+- Galería de patrones de premio (línea, dos líneas, esquinas, X y bingo) dibujada en SVG, disponible desde la barra superior.
+- Hasta 2 tablas por jugador, una debajo de otra, cada una con su botón **¡Cantar!**.
+- El jugador puede anotar los premios del bingo («Línea: $1000, Bingo: Gorra») y verlos durante el juego.
+- Registro de ganadores en el anfitrión (premio, tabla, jugada y hora) y pantalla de verificación en dos columnas.
 - Catálogo de 60 tablas predefinidas (`001` a `060`) que el anfitrión puede reconstruir solo con su código.
 - Cinco premios: línea, dos líneas, cuatro esquinas, X y bingo.
 - Verificación de victorias respetando la cronología: se revisa solo hasta la jugada en que se cantó.
@@ -33,21 +42,21 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 
 ### Jugador
 1. Desde el inicio, entra a **Jugador** y escribe el código de sala (4 letras o números).
-2. Elige una tabla del catálogo (toca un código para ver cómo es) y pulsa **Jugar con esta tabla**. Recuerda su código: se necesita para verificar.
+2. Elige hasta 2 tablas del catálogo (toca los códigos para verlas) y, si quieres, escribe los premios del bingo; pulsa **Jugar**. Recuerda sus códigos: se necesitan para verificar.
 3. Toca cada número que el anfitrión cante para marcarlo; vuelve a tocarlo para desmarcarlo. El centro ya viene marcado.
-4. Cuando la tabla cumple un premio se habilita **Cantar premio**. Púlsalo, avisa en voz alta y muestra la pantalla al anfitrión (código de tabla y premio).
+4. Cuando la tabla cumple un premio se habilita el botón **¡Cantar!** que está debajo de esa tabla. Púlsalo, avisa en voz alta y muestra la pantalla al anfitrión (código de tabla y hora con segundos).
 5. Con **Cambiar de código** se sale de la sala y se puede entrar a otra.
 
 ---
 
 ## 3. Pantallas
 
-| Archivo          | Pantalla                                                        | Dispositivo |
-| ---------------- | --------------------------------------------------------------- | ----------- |
-| `index.html`     | Inicio con accesos a Anfitrión y Jugador y botón **Cómo jugar** | Ambos       |
-| `anfitrion.html` | Pantalla previa y dashboard del sorteo                          | PC          |
-| `verificar.html` | Verificación de una tabla                                       | PC          |
-| `jugador.html`   | Código de sala, catálogo de tablas, juego y reclamo             | Celular     |
+| Archivo | Pantalla | Dispositivo |
+|---|---|---|
+| `index.html` | Inicio con accesos a Anfitrión y Jugador y botón **Cómo jugar** | Ambos |
+| `anfitrion.html` | Pantalla previa y dashboard del sorteo | PC |
+| `verificar.html` | Verificación de una tabla | PC |
+| `jugador.html` | Código de sala, catálogo de tablas, juego y reclamo | Celular |
 
 ### Dashboard del anfitrión
 
@@ -69,7 +78,7 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 - **Tablero (derecha):** los 75 números en cinco columnas (B, I, N, G, O). Cada número se ilumina al salir, siguiendo la cronología; el último tiene un resaltado propio.
 - **Centro:** el número recién salido en un título `<h2>` dentro de una balota de color de acento, visible para todos los presentes.
 - **Panel izquierdo:** jugada actual, números restantes, barra de progreso e historial de las últimas jugadas (`#12 N15`).
-- **Menú inferior:** **Sortear**, **Verificar victoria** y **Pantalla completa**.
+- **Menú inferior:** **Sortear**, **Sorteo automático** (con selector de intervalo), **Verificar victoria**, **Voz** y **Pantalla completa**.
 - El dashboard se ajusta al alto de la ventana para verse completo sin desplazarse.
 
 ---
@@ -79,10 +88,10 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 ### Sala y semillas
 Al crear la sala se generan dos valores aleatorios:
 
-| Valor                       | Quién lo conoce       | Para qué sirve                                                     |
-| --------------------------- | --------------------- | ------------------------------------------------------------------ |
+| Valor | Quién lo conoce | Para qué sirve |
+|---|---|---|
 | `codigoSala` (4 caracteres) | Anfitrión y jugadores | Genera el catálogo de tablas. Los jugadores lo escriben al entrar. |
-| `semillaSorteo` (número)    | Solo el anfitrión     | Define el orden completo en que salen los 75 números.              |
+| `semillaSorteo` (número) | Solo el anfitrión | Define el orden completo en que salen los 75 números. |
 
 Se mantienen separados para que ningún jugador pueda calcular los números futuros a partir del código que conoce. Ambos valores usan un generador pseudoaleatorio con semilla (mulberry32): la misma semilla siempre produce la misma secuencia, lo que permite recuperar el sorteo al recargar la página.
 
@@ -91,13 +100,13 @@ Se mantienen separados para que ningún jugador pueda calcular los números futu
 - El código de tabla son solo tres dígitos (`001` a `060`). En la verificación basta escribir `1` para que se complete a `001`.
 - Cada tabla es de 5×5 y no repite números:
 
-| Columna | Rango | Cantidad                            |
-| ------- | ----- | ----------------------------------- |
-| B       | 1–15  | 5 números                           |
-| I       | 16–30 | 5 números                           |
-| N       | 31–45 | 4 números + casilla libre al centro |
-| G       | 46–60 | 5 números                           |
-| O       | 61–75 | 5 números                           |
+| Columna | Rango | Cantidad |
+|---|---|---|
+| B | 1–15 | 5 números |
+| I | 16–30 | 5 números |
+| N | 31–45 | 4 números + casilla libre al centro |
+| G | 46–60 | 5 números |
+| O | 61–75 | 5 números |
 
 ### Sorteo
 - El siguiente número es siempre el que sigue en el orden definido por `semillaSorteo`. La animación es solo visual.
@@ -107,27 +116,29 @@ Se mantienen separados para que ningún jugador pueda calcular los números futu
 - Si la página se recarga durante una animación, esa jugada aún no estaba guardada y el siguiente sorteo entrega el mismo número.
 - Al llegar a 75 jugadas **Sortear** se deshabilita y se muestra «Se cantaron todos los números».
 - Si el sistema pide reducir el movimiento, no hay animación y el número aparece al instante.
+- **Sorteo automático:** saca un número cada intervalo elegido, con una barra de cuenta regresiva. Espera a que termine la voz antes de contar, se detiene al verificar, al iniciar una nueva partida o al llegar a 75, y la barra espaciadora lo pausa. Mientras está activo, **Sortear** queda deshabilitado.
+- **Voz:** al terminar la animación se dice la letra y el número (por ejemplo «Ene, treinta y tres») con la voz en español del navegador, si existe. El botón **Voz** la silencia y la preferencia se guarda.
 
 ### Premios
 
-| Premio          | Condición                                                            |
-| --------------- | -------------------------------------------------------------------- |
-| Línea           | Una fila, columna o diagonal completa                                |
-| Dos líneas      | Dos filas, columnas o diagonales completas, en cualquier combinación |
-| Cuatro esquinas | Las cuatro esquinas de la tabla                                      |
-| X               | Las dos diagonales completas                                         |
-| Bingo           | Las 25 casillas                                                      |
+| Premio | Condición |
+|---|---|
+| Línea | Una fila, columna o diagonal completa |
+| Dos líneas | Dos filas, columnas o diagonales completas, en cualquier combinación |
+| Cuatro esquinas | Las cuatro esquinas de la tabla |
+| X | Las dos diagonales completas |
+| Bingo | Las 25 casillas |
 
 La casilla libre del centro siempre cuenta como marcada. Los patrones están definidos como datos en `nucleo.js`, por lo que se pueden agregar otros sin cambiar la lógica de verificación.
 
-En el celular del jugador, **Cantar premio** se habilita cuando sus marcas cumplen algún premio y muestra el último que cumple en este orden: línea, dos líneas, cuatro esquinas, X, bingo. Las marcas del jugador solo sirven para habilitar el botón y **no cuentan como prueba**: el anfitrión siempre recalcula todo desde su propia cronología.
+En el celular del jugador, **¡Cantar!** se habilita cuando sus marcas cumplen algún premio, sin indicar cuál: el jugador debe estar atento al premio que se juega. Las casillas a las que les falta una sola para completar un patrón se resaltan con borde punteado y un aviso. Las marcas del jugador solo sirven para habilitar el botón y **no cuentan como prueba**: el anfitrión siempre recalcula todo desde su propia cronología.
 
 ### Verificación y cronología
 
 > La cronología es la del anfitrión. Un premio cantado en la jugada N se verifica **solo con las primeras N jugadas**, aunque la partida ya haya avanzado.
 
 1. Al pulsar **Verificar victoria** se detiene el sorteo y se guarda la jugada actual como punto de verificación.
-2. En `verificar.html` el anfitrión escribe el código de tabla, elige el premio y, si hace falta, cambia **«Verificar hasta la jugada»**. Por defecto es la jugada en que se detuvo la partida; se puede bajar si salió un número de más antes de pulsar el botón.
+2. En `verificar.html` el anfitrión escribe el código de tabla, elige el premio y, si hace falta, escribe la **hora del reclamo** que muestra el celular del jugador (la jugada se calcula sola con la hora de cada número) o cambia **«Verificar hasta la jugada»**. Por defecto es la jugada en que se detuvo la partida; se puede bajar si salió un número de más antes de pulsar el botón.
 3. La verificación reconstruye la tabla y solo considera los números de las primeras N jugadas:
 
 ```js
@@ -139,7 +150,7 @@ function verificarReclamo(codigoSala, idTabla, tipo, jugadas, hastaJugada) {
 }
 ```
 
-4. Se muestra la tabla con las casillas marcadas hasta esa jugada, el resultado **VÁLIDO / INVÁLIDO**, el premio y el indicador `Verificado hasta la jugada 12 de 27`.
+4. Se muestra la tabla con las casillas marcadas hasta esa jugada (si es válido, el patrón ganador se resalta con otro color), el resultado **VÁLIDO / INVÁLIDO**, el premio y el indicador `Verificado hasta la jugada 12 de 27`.
 5. Los premios válidos se guardan en `premiosEntregados` (sin duplicar el mismo premio de la misma tabla).
 6. **Volver al bingo** reanuda la partida con las mismas jugadas, el mismo número en pantalla y el tablero iluminado igual. Está disponible en todo momento, también antes de escribir el código.
 
@@ -154,14 +165,14 @@ Todo se guarda en el `localStorage` de cada dispositivo (claves con prefijo `bin
 estadoAnfitrion = {
   codigoSala: "K7QF",
   semillaSorteo: 918273645,
-  jugadas: [],                 // [{ indice: 1, letra: "B", numero: 3 }, ...]
+  jugadas: [],                 // [{ indice: 1, letra: "B", numero: 3, hora: 1730000000000 }, ...]
   estado: "esperando",         // "esperando" | "en_juego" | "verificando"
   reclamoActual: null,         // { jugadaCongelada }
-  premiosEntregados: []        // { idTabla, tipo, jugadaValidada }
+  premiosEntregados: []        // { idTabla, tipo, jugadaValidada, hora }
 }
 ```
 
-- **Jugador:** `bingo_jugador` guarda el código de sala, la tabla elegida y las marcas, por lo que se conservan si se cierra o se recarga la página.
+- **Jugador:** `bingo_jugador` guarda el código de sala, las tablas elegidas (hasta 2), sus marcas y los premios escritos, por lo que se conservan si se cierra o se recarga la página.
 - **Apariencia:** `bingo_tema` y `bingo_acento`.
 
 Cada acción del anfitrión guarda el estado completo. Al recargar, retoma la partida en la pantalla que corresponde a su `estado`: la previa, el dashboard o la verificación.
@@ -170,11 +181,14 @@ Cada acción del anfitrión guarda el estado completo. Al recargar, retoma la pa
 
 ## 5. Atajos de teclado
 
-| Tecla     | Dónde           | Acción                                   |
-| --------- | --------------- | ---------------------------------------- |
-| `Enter`   | Pantalla previa | Empezar partida                          |
-| `Espacio` | Dashboard       | Sortear                                  |
-| `F5`      | Anfitrión       | Pantalla completa (no recarga la página) |
+| Tecla | Dónde | Acción |
+|---|---|---|
+| `Enter` | Pantalla previa | Empezar partida |
+| `Espacio` | Dashboard | Sortear, o pausar el sorteo automático |
+| `V` | Dashboard | Verificar victoria |
+| `N` | Dashboard | Nueva partida (pide confirmación) |
+| `Esc` | Verificación | Volver al bingo |
+| `F11` | Anfitrión | Pantalla completa del navegador (también oculta la barra superior) |
 
 La barra espaciadora se ignora si el foco está en un campo de texto, si la tecla se mantiene presionada o si **Sortear** está deshabilitado. En pantalla completa se oculta la barra superior para aprovechar todo el espacio.
 
@@ -185,6 +199,7 @@ La barra espaciadora se ignora si el foco está en un campo de texto, si la tecl
 - **Tema:** claro y oscuro definidos con variables CSS. Por defecto sigue la preferencia del sistema hasta que se pulsa el botón de sol o luna.
 - **Color de acento:** cinco colores predefinidos o un selector libre; se usa en botones principales, iconos activos y elementos destacados, y se guarda en el navegador. El color del texto sobre el acento se ajusta solo para mantener el contraste.
 - **Icono:** la aplicación tiene un icono SVG (`img/icono.svg`) en verde `#008608`, que también es uno de los colores de acento predefinidos.
+- **Patrones:** botón en la barra superior de todas las pantallas que abre la galería de premios; las cuadrículas se generan a partir de la definición de cada premio y se construyen solo la primera vez que se abren.
 - **Ayuda:** botón en la barra superior. En el inicio muestra dos pestañas, «Soy jugador» y «Soy anfitrión»; en la vista del jugador solo explica cómo jugar y en la del anfitrión solo cómo administrar la sala. Ambas guías incluyen una historia de usuario y pasos muy sencillos.
 - **Gráficos:** iconos e ilustraciones en SVG en línea que heredan los colores del tema; tipografía del sistema, sin fuentes ni librerías externas.
 - **Accesibilidad:** contraste suficiente en ambos temas, `aria-label` en los SVG, áreas seguras del dispositivo (notch y barra inferior) y transiciones breves que se desactivan si el sistema pide reducir el movimiento.
@@ -207,6 +222,7 @@ bingo/
 └── js/
     ├── nucleo.js      # Semillas, tablas, premios, verificación y localStorage
     ├── interfaz.js    # Iconos SVG, tema, acento, guías de ayuda y dibujo de tablas
+    ├── voz.js         # Voz que canta cada número
     ├── anfitrion.js   # Pantalla previa, sorteo, menú y pantalla completa
     ├── verificar.js   # Verificación cronológica
     └── jugador.js     # Código de sala, catálogo, marcado y reclamo

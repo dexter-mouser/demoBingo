@@ -74,5 +74,24 @@ function verificarReclamo(codigoSala, idTabla, tipo, jugadas, hastaJugada) {
   const tabla = generarTabla(codigoSala, idTabla);
   const validos = new Set(jugadas.slice(0, hastaJugada).map(jugada => jugada.numero));
   const marcadas = tabla.casillas.map(casilla => casilla.libre || validos.has(casilla.numero));
-  return { tabla, marcadas, valido: cumplePatron(marcadas, tipo) };
+  const valido = cumplePatron(marcadas, tipo);
+  return { tabla, marcadas, valido, ganadoras: valido ? celdasDelPremio(marcadas, tipo) : new Set() };
+}
+
+const formatearHora = fecha => [fecha.getHours(), fecha.getMinutes(), fecha.getSeconds()].map(n => String(n).padStart(2, '0')).join(':');
+
+// Casillas que completarían algún patrón al que le falta solo una
+function casillasQueFaltan(marcadas) {
+  const faltan = new Set();
+  for (const patron of [...LINEAS, ...PATRONES.esquinas, ...PATRONES.equis, ...PATRONES.bingo]) {
+    const vacias = patron.filter(i => !marcadas[i]);
+    if (vacias.length === 1) faltan.add(vacias[0]);
+  }
+  return faltan;
+}
+
+// Casillas que forman el premio cumplido (para resaltarlas al verificar)
+function celdasDelPremio(marcadas, tipo) {
+  if (tipo === 'dosLineas') return new Set(LINEAS.filter(linea => linea.every(i => marcadas[i])).slice(0, 2).flat());
+  return new Set(PATRONES[tipo].find(patron => patron.every(i => marcadas[i])) ?? []);
 }
