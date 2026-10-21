@@ -1,20 +1,62 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Bingo · Verificar victoria</title><link rel="icon" href="img/icono.svg" type="image/svg+xml"><link rel="stylesheet" href="estilos/style.css"></head><body><header></header>
-<main><div class="verificacion entra" id="contenido">
-<section class="panel">
-<h1>Verificar victoria</h1>
-<form class="formulario" id="formulario">
-<fieldset><legend><span class="paso">1</span>Código de tabla</legend><input id="campoTabla" placeholder="001" inputmode="numeric" maxlength="3" autocomplete="off" aria-label="Código de tabla" required></fieldset>
-<fieldset><legend><span class="paso">2</span>Premio</legend><div class="opciones" id="opcionesPremio" role="radiogroup" aria-label="Premio"></div></fieldset>
-<fieldset><legend><span class="paso">3</span>Jugada</legend>
-<label>Hora del reclamo (opcional)<input id="campoHora" placeholder="20:47:32" inputmode="numeric" maxlength="8" autocomplete="off"></label>
-<label>Verificar hasta la jugada<input id="campoJugada" type="number" min="0" required></label></fieldset>
-<p class="error" id="error" role="alert"></p>
-<button class="btn primario" data-ico="verificar">Verificar</button></form>
-<button class="btn" id="btnVolver" data-ico="volver">Volver al bingo</button>
-</section>
-<section class="panel" aria-live="polite">
-<div class="vacio" id="vacio"><svg class="ilustracion" viewBox="0 0 64 64" role="img" aria-label="Tabla de bingo vacía"><rect x="10" y="8" width="44" height="48" rx="8" fill="none" stroke="var(--borde)" stroke-width="3"/><path d="M10 22h44M26 22v34M40 22v34M10 36h44M10 46h44" stroke="var(--borde)" stroke-width="3"/></svg><p class="suave">El resultado aparecerá aquí</p></div>
-<div id="zonaResultado" hidden><div class="resultado" id="resultado"></div><div class="chips" id="datosResultado"></div><div id="tabla"></div></div>
-</section>
-</div></main>
-<script src="js/nucleo.js"></script><script src="js/interfaz.js"></script><script src="js/verificar.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>Bingo · Verificar victoria</title>
+    <link rel="icon" href="img/icono.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="estilos/style.css">
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <div class="verificacion entra" id="contenido">
+            <section class="panel">
+                <h1>Verificar victoria</h1>
+                <form class="formulario" id="formulario">
+                    <fieldset>
+                        <legend><span class="paso">1</span>Código de tabla</legend><input id="campoTabla"
+                            placeholder="001" inputmode="numeric" maxlength="3" autocomplete="off"
+                            aria-label="Código de tabla" required>
+                    </fieldset>
+                    <fieldset>
+                        <legend><span class="paso">2</span>Premio</legend>
+                        <div class="opciones" id="opcionesPremio" role="radiogroup" aria-label="Premio"></div>
+                    </fieldset>
+                    <fieldset>
+                        <legend><span class="paso">3</span>Jugada</legend>
+                        <label>Hora del reclamo (opcional)<input id="campoHora" placeholder="20:47:32"
+                                inputmode="numeric" maxlength="8" autocomplete="off"></label>
+                        <label>Verificar hasta la jugada<input id="campoJugada" type="number" min="0" required></label>
+                    </fieldset>
+                    <p class="error" id="error" role="alert"></p>
+                    <button class="btn primario" data-ico="verificar">Verificar</button>
+                </form>
+                <button class="btn" id="btnVolver" data-ico="volver">Volver al bingo</button>
+            </section>
+            <section class="panel" aria-live="polite">
+                <div class="vacio" id="vacio"><svg class="ilustracion" viewBox="0 0 64 64" role="img"
+                        aria-label="Tabla de bingo vacía">
+                        <rect x="10" y="8" width="44" height="48" rx="8" fill="none" stroke="var(--borde)"
+                            stroke-width="3" />
+                        <path d="M10 22h44M26 22v34M40 22v34M10 36h44M10 46h44" stroke="var(--borde)"
+                            stroke-width="3" />
+                    </svg>
+                    <p class="suave">El resultado aparecerá aquí</p>
+                </div>
+                <div id="zonaResultado" hidden>
+                    <div class="resultado" id="resultado"></div>
+                    <div class="chips" id="datosResultado"></div>
+                    <div id="tabla"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="js/nucleo.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/verificar.js"></script>
+</body>
+
+</html>

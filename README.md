@@ -19,8 +19,8 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 - Al abrir el anfitrión con una partida guardada se ofrece continuarla o empezar una nueva.
 - Galería de patrones de premio (línea, dos líneas, esquinas, X y bingo) dibujada en SVG, disponible desde la barra superior.
 - Hasta 2 tablas por jugador, una debajo de otra, cada una con su botón **¡Cantar!**.
-- El jugador puede anotar los premios del bingo («Línea: $1000, Bingo: Gorra») y verlos durante el juego.
-- Registro de ganadores en el anfitrión (premio, tabla, jugada y hora) y pantalla de verificación en dos columnas.
+- Premios pactados por el anfitrión en la pantalla previa, uno por cada condición de victoria (línea, dos líneas, esquinas, X y bingo), visibles durante la partida y al verificar.
+- Registro de ganadores en el anfitrión (premio, nombre editable del ganador, jugada y hora) y pantalla de verificación en dos columnas.
 - Catálogo de 60 tablas predefinidas (`001` a `060`) que el anfitrión puede reconstruir solo con su código.
 - Cinco premios: línea, dos líneas, cuatro esquinas, X y bingo.
 - Verificación de victorias respetando la cronología: se revisa solo hasta la jugada en que se cantó.
@@ -33,7 +33,7 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 ## 2. Cómo se usa
 
 ### Anfitrión
-1. Desde el inicio, entra a **Anfitrión**. Aparece la pantalla previa con el **código de sala** en grande.
+1. Desde el inicio, entra a **Anfitrión**. Aparece la pantalla previa con el **código de sala** en grande y un campo de premio por cada condición de victoria.
 2. Comparte el código con los jugadores y pulsa **Empezar partida** (o `Enter`).
 3. Pulsa **Sortear** (o la barra espaciadora) para sacar cada número. Espera a que termine la animación antes de sacar otro.
 4. Si alguien canta un premio, pulsa **Verificar victoria**. El sorteo queda detenido.
@@ -42,7 +42,7 @@ El anfitrión muestra los números en su pantalla (o en un proyector) y los juga
 
 ### Jugador
 1. Desde el inicio, entra a **Jugador** y escribe el código de sala (4 letras o números).
-2. Elige hasta 2 tablas del catálogo (toca los códigos para verlas) y, si quieres, escribe los premios del bingo; pulsa **Jugar**. Recuerda sus códigos: se necesitan para verificar.
+2. Elige hasta 2 tablas del catálogo (toca los códigos para verlas) y pulsa **Jugar**. Recuerda sus códigos: se necesitan para verificar.
 3. Toca cada número que el anfitrión cante para marcarlo; vuelve a tocarlo para desmarcarlo. El centro ya viene marcado.
 4. Cuando la tabla cumple un premio se habilita el botón **¡Cantar!** que está debajo de esa tabla. Púlsalo, avisa en voz alta y muestra la pantalla al anfitrión (código de tabla y hora con segundos).
 5. Con **Cambiar de código** se sale de la sala y se puede entrar a otra.
@@ -117,7 +117,7 @@ Se mantienen separados para que ningún jugador pueda calcular los números futu
 - Al llegar a 75 jugadas **Sortear** se deshabilita y se muestra «Se cantaron todos los números».
 - Si el sistema pide reducir el movimiento, no hay animación y el número aparece al instante.
 - **Sorteo automático:** saca un número cada intervalo elegido, con una barra de cuenta regresiva. Espera a que termine la voz antes de contar, se detiene al verificar, al iniciar una nueva partida o al llegar a 75, y la barra espaciadora lo pausa. Mientras está activo, **Sortear** queda deshabilitado.
-- **Voz:** al terminar la animación se dice la letra y el número (por ejemplo «Ene, treinta y tres») con la voz en español del navegador, si existe. El botón **Voz** la silencia y la preferencia se guarda.
+- **Voz:** al terminar la animación se dice la letra y el número (por ejemplo «Ene, treinta y tres») con la voz en español más natural que encuentre el navegador (prefiere voces «Natural», «Online» o de Google); si hay varias, un selector permite elegir otra. El botón **Voz** la silencia y la preferencia se guarda.
 
 ### Premios
 
@@ -168,11 +168,12 @@ estadoAnfitrion = {
   jugadas: [],                 // [{ indice: 1, letra: "B", numero: 3, hora: 1730000000000 }, ...]
   estado: "esperando",         // "esperando" | "en_juego" | "verificando"
   reclamoActual: null,         // { jugadaCongelada }
-  premiosEntregados: []        // { idTabla, tipo, jugadaValidada, hora }
+  premiosEntregados: [],       // { idTabla, tipo, jugadaValidada, hora, nombre }
+  premios: {}                  // premio de cada condición: { linea: "$1000" }
 }
 ```
 
-- **Jugador:** `bingo_jugador` guarda el código de sala, las tablas elegidas (hasta 2), sus marcas y los premios escritos, por lo que se conservan si se cierra o se recarga la página.
+- **Jugador:** `bingo_jugador` guarda el código de sala, las tablas elegidas (hasta 2) y sus marcas, por lo que se conservan si se cierra o se recarga la página.
 - **Apariencia:** `bingo_tema` y `bingo_acento`.
 
 Cada acción del anfitrión guarda el estado completo. Al recargar, retoma la partida en la pantalla que corresponde a su `estado`: la previa, el dashboard o la verificación.

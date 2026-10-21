@@ -6,7 +6,7 @@ const leer = (clave, porDefecto) => {
   try { const valor = localStorage.getItem(PREFIJO + clave); return valor === null ? porDefecto : JSON.parse(valor); }
   catch { return porDefecto; }
 };
-const guardar = (clave, valor) => { try { localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); } catch {} };
+const guardar = (clave, valor) => { try { localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); } catch { } };
 
 // Generador pseudoaleatorio con semilla (mulberry32)
 function crearGenerador(semilla) {

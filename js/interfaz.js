@@ -155,3 +155,5 @@ function abrirPatrones() {
   }
   dialogoPatrones.showModal();
 }
+
+const escaparHtml = texto => String(texto).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

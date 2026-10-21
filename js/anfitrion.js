@@ -1,9 +1,10 @@
 const DURACION_ANIMACION_MS = 2500;
 montarBarra('Anfitrión', AYUDA_ANFITRION);
 
-const nuevaPartida = () => ({ codigoSala: generarCodigo(), semillaSorteo: crearSemilla(), jugadas: [], estado: 'esperando', reclamoActual: null, premiosEntregados: [] });
+const nuevaPartida = (premios = {}) => ({ codigoSala: generarCodigo(), semillaSorteo: crearSemilla(), jugadas: [], estado: 'esperando', reclamoActual: null, premiosEntregados: [], premios });
 let estado = leer('anfitrion', null) || nuevaPartida();
 if (estado.estado === 'verificando') location.replace('verificar.html');
+estado.premios ??= {};
 let ordenSorteo = [], sorteando = false;
 
 const prepararOrden = () => { ordenSorteo = barajar(Array.from({ length: 75 }, (_, i) => i + 1), crearGenerador(estado.semillaSorteo)); };
@@ -76,7 +77,7 @@ $('btnContinuar').onclick = () => { sessionStorage.setItem('bingo_sesion', '1');
 $('btnDescartar').onclick = () => {
   sessionStorage.setItem('bingo_sesion', '1'); $('dlgGuardada').close();
   detenerTemporizador(); automatico = false;
-  estado = nuevaPartida(); persistir(); prepararOrden(); pintar();
+  estado = nuevaPartida(estado.premios); persistir(); prepararOrden(); cargarPremios(); pintar();
 };
 function verificarVictoria() {
   if (sorteando) return;
@@ -115,13 +116,37 @@ function pintarVoz() {
 $('btnAuto').onclick = () => alternarAutomatico();
 $('intervaloAuto').value = String(leer('intervalo_auto', 8));
 $('intervaloAuto').onchange = e => { guardar('intervalo_auto', +e.target.value); if (automatico && !sorteando) programarSiguiente(); };
+$('selectorVoz').onchange = e => cambiarVoz(e.target.value);
 $('btnVoz').onclick = () => { guardar('voz_silencio', !vozSilenciada()); if (vozSilenciada()) window.speechSynthesis?.cancel(); pintarVoz(); };
+function pintarPremios() {
+  const definidos = Object.entries(NOMBRES_PREMIO).filter(([tipo]) => estado.premios[tipo]);
+  $('panelPremios').hidden = !definidos.length;
+  $('listaPremios').innerHTML = definidos.map(([tipo, nombre]) => `<li><span>${nombre}</span><b>${escaparHtml(estado.premios[tipo])}</b></li>`).join('');
+}
+function cargarPremios() {
+  document.querySelectorAll('[data-premio]').forEach(campo => { campo.value = estado.premios[campo.dataset.premio] ?? ''; });
+  pintarPremios();
+}
+$('camposPremios').innerHTML = Object.entries(NOMBRES_PREMIO).map(([tipo, nombre]) => `<label>${nombre}<input data-premio="${tipo}" maxlength="40" placeholder="Premio" autocomplete="off"></label>`).join('');
+$('camposPremios').addEventListener('input', e => {
+  const campo = e.target.closest('[data-premio]');
+  if (!campo) return;
+  estado.premios[campo.dataset.premio] = campo.value.trim();
+  persistir(); pintarPremios();
+});
+
 $('btnGanadores').onclick = () => {
   $('listaGanadores').innerHTML = estado.premiosEntregados.length
-    ? estado.premiosEntregados.map(p => `<li><b>${NOMBRES_PREMIO[p.tipo]}</b> · Tabla ${p.idTabla} · jugada ${p.jugadaValidada}${p.hora ? ' · ' + formatearHora(new Date(p.hora)) : ''}</li>`).join('')
+    ? estado.premiosEntregados.map((p, i) => `<li><b>${NOMBRES_PREMIO[p.tipo]}</b>${estado.premios[p.tipo] ? ' · ' + escaparHtml(estado.premios[p.tipo]) : ''}<input class="nombre-ganador" data-i="${i}" value="${escaparHtml(p.nombre || '')}" placeholder="Tabla ${p.idTabla}" maxlength="30" aria-label="Nombre del ganador" autocomplete="off"><span class="suave">jugada ${p.jugadaValidada}${p.hora ? ' · ' + formatearHora(new Date(p.hora)) : ''}</span></li>`).join('')
     : '<li class="suave">Aún no hay ganadores.</li>';
   $('dlgGanadores').showModal();
 };
+$('listaGanadores').addEventListener('input', e => {
+  const campo = e.target.closest('.nombre-ganador');
+  if (!campo) return;
+  estado.premiosEntregados[+campo.dataset.i].nombre = campo.value.trim();
+  persistir();
+});
 $('cerrarGanadores').onclick = () => $('dlgGanadores').close();
 $('btnEmpezar').onclick = empezar;
 $('btnSortear').onclick = sortear;
@@ -129,7 +154,7 @@ $('btnVerificar').onclick = verificarVictoria;
 $('btnNueva').onclick = () => {
   if (!confirm('¿Empezar una nueva partida? Se borrará la actual.')) return;
   detenerTemporizador(); automatico = false;
-  estado = nuevaPartida(); persistir(); prepararOrden(); pintarVoz(); pintar();
+  estado = nuevaPartida(); persistir(); prepararOrden(); pintarVoz(); cargarPremios(); pintar();
 if (estado.estado === 'en_juego') { document.body.dataset.pantallaEncendida = '1'; mantenerPantallaEncendida(); }
 avisarPartidaGuardada();
 };
