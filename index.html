@@ -7,6 +7,13 @@
     <title>Bingo</title>
     <link rel="icon" href="img/icono.svg" type="image/svg+xml">
     <link rel="stylesheet" href="estilos/style.css">
+<style>
+/* Las balotas de la ilustración flotan despacio (solo transform) */
+@keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.flota-a{animation:flotar 7s ease-in-out infinite}
+.flota-b{animation:flotar 9s ease-in-out -3s infinite}
+@media (prefers-reduced-motion: reduce){.flota-a,.flota-b{animation:none}}
+</style>
 </head>
 
 <body>
@@ -39,13 +46,13 @@
                     <rect x="115" y="101" width="22" height="22" rx="6" />
                     <rect x="143" y="101" width="22" height="22" rx="6" />
                 </g>
-                <circle cx="256" cy="80" r="52" fill="var(--acento)" />
+                <g class="flota flota-a"><circle cx="256" cy="80" r="52" fill="var(--acento)" />
                 <circle cx="256" cy="80" r="30" fill="var(--sobre-acento)" />
                 <text x="256" y="92" text-anchor="middle" font-size="32" font-weight="800" fill="#111"
-                    font-family="system-ui,sans-serif">B7</text>
-                <circle cx="290" cy="172" r="30" fill="var(--panel)" stroke="var(--acento)" stroke-width="5" />
+                    font-family="system-ui,sans-serif">B7</text></g>
+                <g class="flota flota-b"><circle cx="290" cy="172" r="30" fill="var(--panel)" stroke="var(--acento)" stroke-width="5" />
                 <text x="290" y="182" text-anchor="middle" font-size="24" font-weight="800" fill="var(--texto)"
-                    font-family="system-ui,sans-serif">N33</text>
+                    font-family="system-ui,sans-serif">N33</text></g>
             </svg>
         </section>
     </main>

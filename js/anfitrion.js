@@ -63,10 +63,18 @@ function sortear() {
   setTimeout(() => { clearInterval(cambio); $('escenario').classList.remove('girando'); terminar(); }, DURACION_ANIMACION_MS);
 }
 
+function animarEntrada(elemento) {
+  elemento.classList.remove('entra'); void elemento.offsetWidth; elemento.classList.add('entra');
+}
 function empezar() {
-  estado.estado = 'en_juego'; persistir(); pintar();
+  if (estado.estado !== 'esperando') return;
+  estado.estado = 'en_juego'; persistir();
   sessionStorage.setItem('bingo_sesion', '1');
   document.body.dataset.pantallaEncendida = '1'; mantenerPantallaEncendida();
+  const mostrarJuego = () => { pintar(); animarEntrada($('juego')); };
+  if (reducirMovimiento) return mostrarJuego();
+  $('previa').classList.add('sale'); // la pantalla previa se desvanece y luego entra el dashboard
+  setTimeout(() => { $('previa').classList.remove('sale'); mostrarJuego(); }, 180);
 }
 function avisarPartidaGuardada() {
   if (['esperando', 'verificando'].includes(estado.estado) || sessionStorage.getItem('bingo_sesion')) return;
@@ -77,7 +85,7 @@ $('btnContinuar').onclick = () => { sessionStorage.setItem('bingo_sesion', '1');
 $('btnDescartar').onclick = () => {
   sessionStorage.setItem('bingo_sesion', '1'); $('dlgGuardada').close();
   detenerTemporizador(); automatico = false;
-  estado = nuevaPartida(estado.premios); persistir(); prepararOrden(); cargarPremios(); pintar();
+  estado = nuevaPartida(estado.premios); persistir(); prepararOrden(); cargarPremios(); pintar(); animarEntrada($('previa'));
 };
 function verificarVictoria() {
   if (sorteando) return;
@@ -127,8 +135,35 @@ function cargarPremios() {
   document.querySelectorAll('[data-premio]').forEach(campo => { campo.value = estado.premios[campo.dataset.premio] ?? ''; });
   pintarPremios();
 }
-$('camposPremios').innerHTML = Object.entries(NOMBRES_PREMIO).map(([tipo, nombre]) => `<label>${nombre}<input data-premio="${tipo}" maxlength="40" placeholder="Premio" autocomplete="off"></label>`).join('');
-$('camposPremios').addEventListener('input', e => {
+$('tarjetasPremios').innerHTML = Object.entries(NOMBRES_PREMIO).map(([tipo, nombre]) =>
+  `<label class="ficha ficha-premio"><span class="ficha-cabecera"><span class="ficha-etiqueta">${nombre}</span><span class="mini-patron">${dibujarPatron(tipo)}</span></span><input data-premio="${tipo}" maxlength="40" placeholder="Premio" aria-label="Premio de ${nombre}" autocomplete="off"><span class="ficha-pastilla">${DESCRIPCION_PATRON[tipo]}</span></label>`).join('');
+
+// Tarjeta para la imagen del QR: se sube cuando ya exista el dominio y se guarda en el navegador
+function pintarQrImagen() {
+  const imagen = leer('qr_imagen', null);
+  $('qrImagen').hidden = !imagen; $('qrVacio').hidden = !!imagen; $('qrQuitar').hidden = !imagen;
+  if (imagen) $('qrImagen').src = imagen;
+  $('qrSubir').textContent = imagen ? 'Cambiar imagen' : 'Subir imagen';
+}
+$('qrSubir').onclick = () => $('qrArchivo').click();
+$('qrArchivo').onchange = e => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+  const origen = new Image(), direccion = URL.createObjectURL(archivo);
+  origen.onload = () => {
+    const escala = Math.min(1, 480 / Math.max(origen.width, origen.height));
+    const lienzo = document.createElement('canvas');
+    lienzo.width = Math.round(origen.width * escala); lienzo.height = Math.round(origen.height * escala);
+    lienzo.getContext('2d').drawImage(origen, 0, 0, lienzo.width, lienzo.height);
+    guardar('qr_imagen', lienzo.toDataURL('image/png'));
+    URL.revokeObjectURL(direccion); pintarQrImagen();
+  };
+  origen.onerror = () => { URL.revokeObjectURL(direccion); $('qrVacio').hidden = false; $('qrVacio').textContent = 'No se pudo leer la imagen. Prueba con PNG o JPG.'; };
+  origen.src = direccion; e.target.value = '';
+};
+$('qrQuitar').onclick = () => { localStorage.removeItem(PREFIJO + 'qr_imagen'); $('qrVacio').textContent = 'Aquí irá la imagen del QR'; pintarQrImagen(); };
+
+$('tarjetasPremios').addEventListener('input', e => {
   const campo = e.target.closest('[data-premio]');
   if (!campo) return;
   estado.premios[campo.dataset.premio] = campo.value.trim();
@@ -136,9 +171,14 @@ $('camposPremios').addEventListener('input', e => {
 });
 
 $('btnGanadores').onclick = () => {
-  $('listaGanadores').innerHTML = estado.premiosEntregados.length
-    ? estado.premiosEntregados.map((p, i) => `<li><b>${NOMBRES_PREMIO[p.tipo]}</b>${estado.premios[p.tipo] ? ' · ' + escaparHtml(estado.premios[p.tipo]) : ''}<input class="nombre-ganador" data-i="${i}" value="${escaparHtml(p.nombre || '')}" placeholder="Tabla ${p.idTabla}" maxlength="30" aria-label="Nombre del ganador" autocomplete="off"><span class="suave">jugada ${p.jugadaValidada}${p.hora ? ' · ' + formatearHora(new Date(p.hora)) : ''}</span></li>`).join('')
-    : '<li class="suave">Aún no hay ganadores.</li>';
+  const entregados = estado.premiosEntregados;
+  $('resumenGanadores').textContent = entregados.length ? `${entregados.length} premio${entregados.length === 1 ? '' : 's'} entregado${entregados.length === 1 ? '' : 's'}` : 'Aún no se ha entregado ningún premio.';
+  $('listaGanadores').innerHTML = entregados.length
+    ? entregados.map((p, i) => {
+      const premio = (p.premio ?? estado.premios[p.tipo]) || '';
+      return `<li class="ficha"><div class="ficha-cabecera"><span class="ficha-etiqueta">${NOMBRES_PREMIO[p.tipo]}</span>${ico('trofeo', 'Premio ganado')}</div><strong class="ficha-valor">${premio ? escaparHtml(premio) : '<span class="suave">Sin premio</span>'}</strong><input class="nombre-ganador" data-i="${i}" value="${escaparHtml(p.nombre || '')}" placeholder="Tabla ${p.idTabla}" maxlength="30" aria-label="Nombre del ganador" autocomplete="off"><span class="ficha-pastilla">Jugada ${p.jugadaValidada}${p.hora ? ' · ' + formatearHora(new Date(p.hora)) : ''}</span></li>`;
+    }).join('')
+    : '<li class="ficha ficha-vacia suave">Aún no hay ganadores.</li>';
   $('dlgGanadores').showModal();
 };
 $('listaGanadores').addEventListener('input', e => {
@@ -154,9 +194,7 @@ $('btnVerificar').onclick = verificarVictoria;
 $('btnNueva').onclick = () => {
   if (!confirm('¿Empezar una nueva partida? Se borrará la actual.')) return;
   detenerTemporizador(); automatico = false;
-  estado = nuevaPartida(); persistir(); prepararOrden(); pintarVoz(); cargarPremios(); pintar();
-if (estado.estado === 'en_juego') { document.body.dataset.pantallaEncendida = '1'; mantenerPantallaEncendida(); }
-avisarPartidaGuardada();
+  estado = nuevaPartida(estado.premios); persistir(); prepararOrden(); cargarPremios(); pintar(); animarEntrada($('previa'));
 };
 function alternarPantallaCompleta() {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -179,4 +217,6 @@ addEventListener('keydown', e => {
   if (e.code === 'KeyN') $('btnNueva').click();
 });
 
-persistir(); prepararOrden(); pintar();
+persistir(); prepararOrden(); pintarVoz(); cargarPremios(); pintarQrImagen(); pintar();
+if (estado.estado === 'en_juego') { document.body.dataset.pantallaEncendida = '1'; mantenerPantallaEncendida(); }
+avisarPartidaGuardada();

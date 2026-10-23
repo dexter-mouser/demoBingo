@@ -46,7 +46,7 @@ if (!estado) {
     $('resultado').innerHTML = ico(r.valido ? 'verificar' : 'fallo', r.valido ? 'Válido' : 'Inválido') + `<span>${r.valido ? 'VÁLIDO' : 'INVÁLIDO'}</span>`;
     $('datosResultado').innerHTML = `<span class="chip">Tabla ${idTabla}</span><span class="chip">${NOMBRES_PREMIO[tipo]}</span>${estado.premios?.[tipo] ? `<span class="chip">Premio: ${escaparHtml(estado.premios[tipo])}</span>` : ''}<span class="chip">Jugada ${hasta} de ${total}</span>`;
     if (r.valido && !estado.premiosEntregados.some(p => p.idTabla === idTabla && p.tipo === tipo)) {
-      estado.premiosEntregados.push({ idTabla, tipo, jugadaValidada: hasta, hora: Date.now() });
+      estado.premiosEntregados.push({ idTabla, tipo, jugadaValidada: hasta, hora: Date.now(), premio: estado.premios?.[tipo] || '' });
       guardar('anfitrion', estado);
     }
   };

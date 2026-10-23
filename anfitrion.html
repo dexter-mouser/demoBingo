@@ -6,22 +6,89 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <title>Bingo · Anfitrión</title>
     <link rel="icon" href="img/icono.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="estilos/style.css">
+    <link rel="stylesheet" href="estilos/style.css?v=5">
+<style>
+/* Pantalla previa y ganadores: fichas organizadas con flexbox (no dependen de style.css) */
+#previa{display:flex;flex-direction:column;gap:16px;max-width:1000px;margin:4px auto;padding:0;text-align:left}
+.previa-fila{display:flex;flex-wrap:wrap;gap:16px}
+.previa-fila>.ficha{flex:1 1 320px}
+.ficha{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--borde);border-radius:16px;background:var(--panel)}
+.ficha-cabecera{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ficha-etiqueta{font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.ficha-valor{font-size:2rem;font-weight:800;line-height:1.1;overflow-wrap:anywhere}
+.ficha-pastilla{align-self:flex-start;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--acento) 16%,var(--panel));font-size:.75rem;font-weight:700}
+.ficha-codigo{align-items:center;justify-content:center;text-align:center}
+.codigo-sala{font-size:clamp(2.6rem,7vw,4.5rem);font-weight:800;letter-spacing:.15em;line-height:1;border-bottom:6px solid var(--acento);padding:0 0 8px .15em}
+.ficha-imagen{justify-content:center;text-align:center}
+.imagen-zona{display:flex;align-items:center;justify-content:center;height:150px;padding:6px;border:2px dashed var(--borde);border-radius:12px;font-size:.9rem;overflow:hidden}
+.imagen-zona img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;background:#fff;padding:4px}
+.imagen-acciones{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.imagen-acciones .btn{min-height:44px;padding:0 16px}
+.premios-caja{display:flex;flex-direction:column;gap:14px;padding:16px;border:1px solid var(--borde);border-radius:16px;background:var(--panel)}
+.premios-titulo{display:flex;align-items:center;gap:12px}
+.premios-titulo .ico{width:30px;height:30px;color:var(--acento)}
+.premios-titulo h2{font-size:1.2rem}
+.premios-flex{display:flex;flex-wrap:wrap;gap:12px}
+#tarjetasPremios{display:contents}
+.premios-flex .ficha{flex:1 1 calc(33.333% - 12px);min-width:230px}
+.ficha-premio{cursor:text}
+.ficha-premio input{width:100%;min-height:0;padding:0;border:0;border-radius:6px;background:transparent;color:var(--texto);font:800 1.5rem system-ui,sans-serif}
+.ficha-premio input::placeholder{color:var(--suave);font-weight:600}
+.mini-patron svg{width:30px;height:30px;display:block}
+.ficha-empezar{justify-content:center;align-items:flex-start}
+.aviso-sala{padding:14px 18px;border:1px solid var(--borde);border-left:5px solid var(--acento);border-radius:14px;background:var(--panel)}
+.aviso-sala h2{font-size:1.15rem}
+#dlgGanadores{width:min(900px,94vw);max-width:none}
+#dlgGanadores #listaGanadores{list-style:none;padding:0;margin:14px 0;display:flex;flex-wrap:wrap;gap:14px}
+#dlgGanadores .ficha{flex:1 1 240px;flex-wrap:nowrap;align-items:stretch}
+#dlgGanadores .ficha-cabecera .ico{color:var(--acento)}
+#dlgGanadores .nombre-ganador{flex:none;width:100%;min-height:44px}
+#dlgGanadores .ficha-vacia{flex-basis:100%;align-items:center;text-align:center}
+#previa.sale{opacity:0;transform:translateY(-8px);transition:opacity .18s ease,transform .18s ease}
+@media (prefers-reduced-motion: reduce){#previa.sale{transition:none}}
+</style>
 </head>
 
 <body>
     <header></header>
     <main>
-        <section id="previa" class="panel previa entra" hidden>
-            <h1>Sala lista</h1>
-            <p class="suave">Comparte este código con los jugadores</p>
-            <div class="codigo" id="codigoGrande" aria-live="polite"></div>
-            <div class="premios-previa">
-                <h2>Premios de la partida</h2>
-                <p class="suave">Opcional: pacta el premio de cada condición de victoria.</p>
-                <div id="camposPremios"></div>
-            </div><button class="btn primario" id="btnEmpezar" data-ico="jugar">Empezar partida</button>
-            <p class="suave">También puedes pulsar Enter</p>
+        <section id="previa" class="previa entra" hidden>
+            <div class="previa-fila">
+                <article class="ficha ficha-codigo">
+                    <h1>Sala lista</h1>
+                    <p class="suave">Comparte este código con los jugadores</p>
+                    <div class="codigo-sala" id="codigoGrande" aria-live="polite"></div>
+                </article>
+                <article class="ficha ficha-imagen">
+                    <div class="ficha-etiqueta">Imagen del QR</div>
+                    <div class="imagen-zona">
+                        <img id="qrImagen" alt="Código QR para entrar al bingo" hidden>
+                        <p class="suave" id="qrVacio">Aquí irá la imagen del QR</p>
+                    </div>
+                    <div class="imagen-acciones">
+                        <button class="btn" id="qrSubir">Subir imagen</button>
+                        <button class="btn" id="qrQuitar" hidden>Quitar</button>
+                        <input type="file" id="qrArchivo" accept="image/*" hidden>
+                    </div>
+                </article>
+            </div>
+            <div class="premios-caja">
+                <div class="premios-titulo">
+                    <span data-ico="trofeo"></span>
+                    <div>
+                        <h2>Premios de la partida</h2>
+                        <p class="suave">Opcional: pacta el premio de cada condición de victoria.</p>
+                    </div>
+                </div>
+                <div class="premios-flex">
+                    <div id="tarjetasPremios"></div>
+                    <article class="ficha ficha-empezar">
+                        <div class="ficha-etiqueta">Todo listo</div>
+                        <button class="btn primario" id="btnEmpezar" data-ico="jugar">Empezar partida</button>
+                        <span class="ficha-pastilla">También con Enter</span>
+                    </article>
+                </div>
+            </div>
         </section>
         <section id="juego" hidden>
             <div class="franja">
@@ -77,8 +144,12 @@
         </section>
     </main>
     <dialog id="dlgGanadores" aria-labelledby="tituloGanadores">
-        <h2 id="tituloGanadores">Ganadores</h2>
-        <ol id="listaGanadores"></ol><button class="btn primario" id="cerrarGanadores">Cerrar</button>
+        <div class="aviso-sala">
+            <h2 id="tituloGanadores">Ganadores</h2>
+            <p class="suave" id="resumenGanadores"></p>
+        </div>
+        <ol id="listaGanadores"></ol>
+        <button class="btn primario" id="cerrarGanadores">Cerrar</button>
     </dialog>
     <dialog id="dlgGuardada" aria-labelledby="tituloGuardada">
         <h2 id="tituloGuardada">Partida guardada</h2>
@@ -86,10 +157,10 @@
         <div class="acciones-dialogo"><button class="btn primario" id="btnContinuar">Continuar</button><button
                 class="btn" id="btnDescartar">Nueva partida</button></div>
     </dialog>
-    <script src="js/nucleo.js"></script>
-    <script src="js/interfaz.js"></script>
-    <script src="js/voz.js"></script>
-    <script src="js/anfitrion.js"></script>
+    <script src="js/nucleo.js?v=5"></script>
+    <script src="js/interfaz.js?v=5"></script>
+    <script src="js/voz.js?v=5"></script>
+    <script src="js/anfitrion.js?v=5"></script>
 </body>
 
 </html>
